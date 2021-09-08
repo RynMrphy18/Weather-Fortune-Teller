@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
+    <title>Weather-Fortune</title>
+</head>
+
+
+<body>
+<header><h1>Weather Dashboard</h1></header>
+
+<main>
+
+<div class="row">
+    <div id="city-search-container" class="col-md-4">
+        <div id="city-search-container2" class="">
+        <h2>Search for a city:</h2>
+        <form>
+        <input type="text" id="city-search" placeholder= "Write city here">
+        <button id="city-search-btn">Search</button>
+        </form>
+        </div>
+
+        <div id="searched-cities"> 
+            <h3>Recently-Searched Cities: </h3>
+        </div>
+    </div>
+
+    <div id="city-display-container" class="col-md-5">
+         <div id="city-display" class="">
+            <h2>Forecast for today:</h2>
+            <div class="container">
+                <div class="row">
+                    <h3>
+                        <img class="weather-icon" id="today-icon">
+                        <span class="align-middle" id="city-name">City Name</span>
+                    </h3>
+                </div>
+
+                <div class="row">
+                    <div>
+                        <p>Current Temperature: <span id="current-temp"></span> &deg;F</p>
+                        <p>Humidity: <span id="current-humidity"></span>%</p>
+                        <p>Wind Speed: <span id="current-wind-speed"></span> MPH</p>
+                        <p>UV Index: <span id="current-uvi"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div id="5-day-container" class="col-md-5 offset-md-4">
+         <div id="5-day" class="">
+            <h2>5-Day Forecast:</h2>
+
+            <div class="col">
+                <p id="date-1"></p>
+                <h3 class="align-middle">
+                    <img class="weather-icon" id="icon-1">
+                    <span id=temp-1></span> &deg;F
+                </h3>    
+                <p>Humidity: <span id="humidity-1"></span>%</p>
+                <p>Wind speed: <span id="wind-speed-1"></span> MPH</p>
+            </div>
+
+            <div class="col">
+                <p id="date-2"></p>
+                <h3 class="align-middle">
+                    <img class="weather-icon" id="icon-2">
+                    <span id=temp-2></span> &deg;F
+                </h3>    
+                <p>Humidity: <span id="humidity-2"></span>%</p>
+                <p>Wind speed: <span id="wind-speed-2"></span> MPH</p>
+            </div>
+
+            <div class="col">
+                <p id="date-3"></p>
+                <h3 class="align-middle">
+                    <img class="weather-icon" id="icon-3">
+                    <span id=temp-3></span> &deg;F
+                </h3>    
+                <p>Humidity: <span id="humidity-3"></span>%</p>
+                <p>Wind speed: <span id="wind-speed-3"></span> MPH</p>
+            </div>
+
+            <div class="col">
+                <p id="date-4"></p>
+                <h3 class="align-middle">
+                    <img class="weather-icon" id="icon-4">
+                    <span id=temp-4></span> &deg;F
+                </h3>    
+                <p>Humidity: <span id="humidity-4"></span>%</p>
+                <p>Wind speed: <span id="wind-speed-4"></span> MPH</p>
+            </div>
+
+            <div class="col">
+                <p id="date-5"></p>
+                <h3 class="align-middle">
+                    <img class="weather-icon" id="icon-5">
+                    <span id=temp-5></span> &deg;F
+                </h3>    
+                <p>Humidity: <span id="humidity-5"></span>%</p>
+                <p>Wind speed: <span id="wind-speed-5"></span> MPH</p>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</main>
+
+<script src="assets/js/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+</body>
+</html>
