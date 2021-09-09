@@ -142,31 +142,32 @@ var saveCity = function(city) {
 }
 
 var loadCities = function() {
-    cityArr = JSON.parse(localStorage.getItem("cities"));
+    cityArr = JSON.parse(localStorage.getItem('cities'));
 
     if (!cityArr) {
-        cityArr= [];
+        cityArr = [];
         return false;
-    } else if (cityArr.length > 10) {
+    } else if (cityArr.length > 5) {
+        // saves only the five most recent cities
         cityArr.shift();
     }
 
-    var searchedCities = document.querySelector("#searched-cities");
-    var citiesList = document.createElement("ul");
-    citiesList.className = 'list-group list-group-flush city-list';
-    searchedCities.appendChild(citiesList);
+    var recentCities = document.querySelector('#searched-cities');
+    var cityListUl = document.createElement('ul');
+    cityListUl.className = 'list-group list-group-flush city-list';
+    recentCities.appendChild(cityListUl);
 
     for (var i = 0; i < cityArr.length; i++) {
-        var cityListItem = document.createElement("button");
-        cityListItem.setAttribute("type", "button");
-        cityListItem.className = "list-group-item";
-        cityListItem.setAttribute("value", cityArr[i]);
+        var cityListItem = document.createElement('button');
+        cityListItem.setAttribute('type', 'button');
+        cityListItem.className = 'list-group-item';
+        cityListItem.setAttribute('value', cityArr[i]);
         cityListItem.textContent = cityArr[i];
-        citiesList.prepend(cityListItem);
+        cityListUl.prepend(cityListItem);
     }
 
-    var cityList = document.querySelector("#city-list");
-    cityList.addEventListener("click", selectRecent)
+    var cityList = document.querySelector('.city-list');
+    cityList.addEventListener('click', selectRecent)
 }
 
 var selectRecent = function(event) {
