@@ -26,7 +26,7 @@ var formHandler = function(event) {
 var getLatLong = function(city) {
 
     var currentWeatherAPI = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + apiKey;
-    console.log(fetch)
+   
 
     fetch(currentWeatherAPI).then(function(response) {
         
@@ -69,7 +69,7 @@ var getCityForecast = function(city, lon, lat) {
 }
 
 var displayTemp = function(element, temperature) {
-    console.log(temperature)
+   
     var temp = document.querySelector(element);
     var elementText = Math.round(temperature);
     temp.textContent = elementText;
@@ -88,15 +88,25 @@ var currentForecast = function(forecast) {
     currentHumidity.textContent = forecast.current.humidity;
 
     var currentWind = document.querySelector("#current-wind-speed");
-    currentWind.textContent = forecast.current["wind_speed"];
+    currentWind.textContent = forecast.current.wind_speed;
 
     var uvi = document.querySelector("#current-uvi")
-    var currentUvi = forecast.current["uvi"];
+    var currentUvi = forecast.current.uvi;
     uvi.textContent = currentUvi;
     
-
+    switch (true) {
+        case (currentUvi <= 2):
+            uvi.className = 'badge badge-success';
+            break;
+        case (currentUvi <= 7):
+            uvi.className = 'badge badge-warning';
+            break;
+        case (currentUvi >=7):
+            uvi.className = 'badge badge-danger';
+            break;
+    
 }
-
+}
 var fiveDayForecast = function(forecast) {
 
     for (var i = 1;i<6; i++) {
@@ -121,9 +131,9 @@ var fiveDayForecast = function(forecast) {
 
 var saveCity = function(city) {
 
-    for (var i =0; i < cityArray.length; i++) {
+    for (var i = 0; i < cityArr.length; i++) {
         if (city === cityArr[i]) {
-            cityArr.splice(i ,1);
+            cityArr.splice(i, 1);
         }
     }
 
@@ -137,13 +147,13 @@ var loadCities = function() {
     if (!cityArr) {
         cityArr= [];
         return false;
-    } else if (cityArr.length < 10) {
+    } else if (cityArr.length > 10) {
         cityArr.shift();
     }
 
     var searchedCities = document.querySelector("#searched-cities");
     var citiesList = document.createElement("ul");
-    // cities list class here
+    citiesList.className = 'list-group list-group-flush city-list';
     searchedCities.appendChild(citiesList);
 
     for (var i = 0; i < cityArr.length; i++) {
@@ -169,8 +179,3 @@ loadCities();
 
 cityBtn.addEventListener("click", formHandler)
 
-citySearch.addEventListener("keyup", function(event) {
-    if (event.keyCode === 13) {
-        cityBtn.click();
-    }
-});
