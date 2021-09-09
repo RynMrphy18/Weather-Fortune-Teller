@@ -6,7 +6,7 @@ var cityArray = [];
 var apiKey= "4cf54271426a4d88da41801ce8b338ce";
 
 var formHandler = function(event) {
-
+    event.preventDefault();
     var inputtedCity= citySearch
     .value
     .trim()
@@ -25,11 +25,14 @@ var formHandler = function(event) {
 
 var getLatLong = function(city) {
 
-    var currentWeatherAPI = "https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}";
+    var currentWeatherAPI = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + apiKey;
+    console.log(fetch)
 
-    fetch(currentWeatherAPI).then(function(response){
+    fetch(currentWeatherAPI).then(function(response) {
+        
         if (response.ok) {
             response.json().then(function(data) {
+                
                 var lon = data.coord["lon"];
                 var lat = data.coord["lat"];
                 getCityForecast(city, lon, lat);
@@ -42,20 +45,21 @@ var getLatLong = function(city) {
         }
     })
     .catch(function(error) {
-        alert("Could not load weather");
+      console.log(error)
+        // alert("Could not load weather");
     })
 }
 
 var getCityForecast = function(city, lon, lat) {
 
-    var oneCallAPI = "https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly,alerts&appid=${apiKey}";
+    var oneCallAPI = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly,alerts&appid=${apiKey}`;
 
-    fetch(oneCallAPI).then(function(reponse) {
-        if (reponse.ok) {
+    fetch(oneCallAPI).then(function(response) {
+        if (response.ok) {
             response.json().then(function(data) {
                 
 
-                cityNameEl.textContent = "${city} (${moment().format('M/D/YYYY')})";
+                // cityNameEl.textContent = "${city} (${moment().format('M/D/YYYY')})";
 
                 currentForecast(data);
                 fiveDayForecast(data);
@@ -65,25 +69,26 @@ var getCityForecast = function(city, lon, lat) {
 }
 
 var displayTemp = function(element, temperature) {
+    console.log(temperature)
     var temp = document.querySelector(element);
     var elementText = Math.round(temperature);
     temp.textContent = elementText;
 }
 
 var currentForecast = function(forecast) {
-    
-    var weatherIconEl = document.querySelector("#today-icon")
-    var currentIcon = forecast.current.weather[0].currentIcon;
-    weatherIconEl.setAttribute("src", "http://openweathermap.org/img/wn/${currentIcon}.png");
-    weatherIconEl.setAtrribute("alt", forecast.current.weather[0].main);
+    console.log(forecast)
+    var weatherIconEl = document.querySelector("#today-icon");
+    var currentIcon = forecast.current.weather[0].icon;
+    weatherIconEl.setAttribute("src", `http://openweathermap.org/img/wn/${currentIcon}.png`);
+    weatherIconEl.setAttribute("alt", forecast.current.weather[0].main);
 
-    displayTemp("current-temp");
+    displayTemp("#current-temp", forecast.current.temp);
    
     var currentHumidity = document.querySelector("#current-humidity");
-    currentHumidity.textContent = forecast.current["humidity"];
+    currentHumidity.textContent = forecast.current.humidity;
 
-    var currentWind = document.querySelector("current-wind-speed");
-    currentWind.textContent = forefast.current["wind_speed"];
+    var currentWind = document.querySelector("#current-wind-speed");
+    currentWind.textContent = forecast.current["wind_speed"];
 
     var uvi = document.querySelector("#current-uvi")
     var currentUvi = forecast.current["uvi"];
@@ -99,8 +104,8 @@ var fiveDayForecast = function(forecast) {
         dateP.textContent = moment().add(i, "days").format("M/D/YYYY");
 
         var iconImg = document.querySelector("#icon-" + i);
-        var iconcode = forecast.daily[i].weather[0].iconImg;
-        iconImg.setAttribute("src", "http://openweathermap.org/img/wn/${iconCode}.png");
+        var iconCode = forecast.daily[i].weather[0].icon;
+        iconImg.setAttribute("src", `http://openweathermap.org/img/wn/${iconCode}.png`);
         iconImg.setAttribute("alt", forecast.daily[i].weather[0].main);
 
         displayTemp("#temp-" + i, forecast.daily[i].temp.day);
@@ -150,7 +155,7 @@ var loadCities = function() {
         citiesList.prepend(cityListItem);
     }
 
-    var cityList = document.querySelector(".city-list");
+    var cityList = document.querySelector("#city-list");
     cityList.addEventListener("click", selectRecent)
 }
 
@@ -161,6 +166,7 @@ var selectRecent = function(event) {
 }
 
 loadCities();
+
 cityBtn.addEventListener("click", formHandler)
 
 citySearch.addEventListener("keyup", function(event) {
