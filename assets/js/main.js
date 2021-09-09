@@ -1,10 +1,11 @@
-
+// define global variables
 var citySearch = document.querySelector("#city-search");
 var cityBtn = document.querySelector("#city-search-btn");
 var cityNameEl = document.querySelector("#city-display");
 var cityArray = [];
 var apiKey= "4cf54271426a4d88da41801ce8b338ce";
 
+// grabs inputted value and converts it 
 var formHandler = function(event) {
     event.preventDefault();
     var inputtedCity= citySearch
@@ -14,7 +15,7 @@ var formHandler = function(event) {
     .split("")
     .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
     .join("");
-
+// finds lat/long of inputted city
     if (inputtedCity) {
         getLatLong(inputtedCity)
         citySearch.value= "";
@@ -25,9 +26,10 @@ var formHandler = function(event) {
 
 var getLatLong = function(city) {
 
+    // accesses api to find lat/long
     var currentWeatherAPI = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + apiKey;
    
-
+    // fetches lat/long
     fetch(currentWeatherAPI).then(function(response) {
         
         if (response.ok) {
@@ -44,14 +46,16 @@ var getLatLong = function(city) {
             alert("Error: ${response.statusText}")
         }
     })
+    // sends error if network has issue
     .catch(function(error) {
       console.log(error)
-        // alert("Could not load weather");
+        alert("Could not load weather");
     })
 }
 
 var getCityForecast = function(city, lon, lat) {
 
+    // calls api to fetch weather forecast
     var oneCallAPI = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly,alerts&appid=${apiKey}`;
 
     fetch(oneCallAPI).then(function(response) {
@@ -70,6 +74,7 @@ var getCityForecast = function(city, lon, lat) {
 
 var displayTemp = function(element, temperature) {
    
+    // defines and rounds temperature to nearest value
     var temp = document.querySelector(element);
     var elementText = Math.round(temperature);
     temp.textContent = elementText;
@@ -78,12 +83,14 @@ var displayTemp = function(element, temperature) {
 var currentForecast = function(forecast) {
     console.log(forecast)
     var weatherIconEl = document.querySelector("#today-icon");
+    // finds weather icon in object and applies it
     var currentIcon = forecast.current.weather[0].icon;
     weatherIconEl.setAttribute("src", `http://openweathermap.org/img/wn/${currentIcon}.png`);
     weatherIconEl.setAttribute("alt", forecast.current.weather[0].main);
 
     displayTemp("#current-temp", forecast.current.temp);
    
+    // finds humidity, wind speed and uvi from object and applies it
     var currentHumidity = document.querySelector("#current-humidity");
     currentHumidity.textContent = forecast.current.humidity;
 
@@ -94,6 +101,7 @@ var currentForecast = function(forecast) {
     var currentUvi = forecast.current.uvi;
     uvi.textContent = currentUvi;
     
+    // applies color based off uvi value
     switch (true) {
         case (currentUvi <= 2):
             uvi.className = 'badge badge-success';
@@ -109,6 +117,7 @@ var currentForecast = function(forecast) {
 }
 var fiveDayForecast = function(forecast) {
 
+    // same as above functions but based off daily object and with for loop applied to each day's containers
     for (var i = 1;i<6; i++) {
         var dateP = document.querySelector("#date-" + i);
         dateP.textContent = moment().add(i, "days").format("M/D/YYYY");
@@ -131,6 +140,7 @@ var fiveDayForecast = function(forecast) {
 
 var saveCity = function(city) {
 
+    // saves cities to local storage and makes it so same city cannot be entered in twice
     for (var i = 0; i < cityArr.length; i++) {
         if (city === cityArr[i]) {
             cityArr.splice(i, 1);
@@ -148,15 +158,17 @@ var loadCities = function() {
         cityArr = [];
         return false;
     } else if (cityArr.length > 5) {
-        // saves only the five most recent cities
+        // Saves up to five cities
         cityArr.shift();
     }
 
-    var recentCities = document.querySelector('#searched-cities');
+    // loads cities to section under search bar
+    var searchedCities = document.querySelector('#searched-cities');
     var cityListUl = document.createElement('ul');
     cityListUl.className = 'list-group list-group-flush city-list';
-    recentCities.appendChild(cityListUl);
+    searchedCities.appendChild(cityListUl);
 
+    // creates a button element for each searched city
     for (var i = 0; i < cityArr.length; i++) {
         var cityListItem = document.createElement('button');
         cityListItem.setAttribute('type', 'button');
@@ -170,6 +182,7 @@ var loadCities = function() {
     cityList.addEventListener('click', selectRecent)
 }
 
+// allows user to click on created buttom element and search for that cities data
 var selectRecent = function(event) {
     var clickedCity = event.target.getAttribute("value");
 
@@ -177,6 +190,8 @@ var selectRecent = function(event) {
 }
 
 loadCities();
+
+// allows button click to run functions
 
 cityBtn.addEventListener("click", formHandler)
 
